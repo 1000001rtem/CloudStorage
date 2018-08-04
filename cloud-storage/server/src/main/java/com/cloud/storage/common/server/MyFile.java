@@ -19,7 +19,6 @@ public class MyFile implements Directorys, Serializable {
         this.bytes = bytes;
         this.fileSize = String.valueOf(bytes.length/1024) + " kb";
         this.path = SERVER_DIRECTORY + "/" + this.getFileName();
-        addFile();
     }
 
     public MyFile(String fileName, long fileSize) {
@@ -28,15 +27,26 @@ public class MyFile implements Directorys, Serializable {
     }
 
 
-    private void addFile() {
-        File file = new File(this.path);
-        try (BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(file))) {
-            stream.write(this.bytes);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+    public boolean addFile(int userId) {
+        if (addFileInDB(userId)) {
+            File file = new File(this.path);
+            try (BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(file))) {
+                stream.write(this.bytes);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return true;
         }
+        return false;
+    }
+
+    private boolean addFileInDB(int id) {
+        table = new FileTable();
+        boolean result = table.createNewFile(this, id);
+        table.disconnectDb();
+        return result;
     }
 
     public String getPath() {
@@ -57,11 +67,5 @@ public class MyFile implements Directorys, Serializable {
 
     public String getFileSize() {
         return this.fileSize;
-    }
-
-    public void addFileInDB(int id) {
-        table = new FileTable();
-        table.createNewFile(this, id);
-        table.disconnectDb();
     }
 }

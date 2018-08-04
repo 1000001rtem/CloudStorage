@@ -6,6 +6,8 @@ import java.io.*;
 
 public class MyFile implements Directorys {
 
+    //todo: do ref
+
     private String fileName;
     private String fileSize;
     private String path;

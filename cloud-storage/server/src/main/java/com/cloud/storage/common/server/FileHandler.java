@@ -2,10 +2,11 @@ package com.cloud.storage.common.server;
 
 import com.cloud.storage.common.Directorys;
 import com.cloud.storage.common.MessageEncoder;
+import com.cloud.storage.common.ServiceCommands;
 import com.cloud.storage.common.message.FileMessage;
 import io.netty.channel.ChannelHandlerContext;
 
-public class FileHandler implements Directorys {
+public class FileHandler implements Directorys, ServiceCommands {
 
     private ChannelHandlerContext ctx;
     private FileMessage msg;
@@ -25,10 +26,12 @@ public class FileHandler implements Directorys {
     private void createFile(FileMessage message) {
         MessageDecoder decoder = new MessageDecoder();
         MyFile myFile = decoder.getFile(message);
-        System.out.println(1);
-        if(encoder == null) System.out.println(232);
-        ctx.write(encoder.getFileListMessage(ServerUtilities.getFileList()));
-        ctx.flush();
-        System.out.println(2);
+        if (myFile.addFile(user.getId())) {
+            ctx.write(encoder.getFileListMessage(ServerUtilities.getFileList()));
+            ctx.flush();
+        } else{
+            ctx.write(encoder.getMessage(FILE_EXIST));
+            ctx.flush();
+        }
     }
 }

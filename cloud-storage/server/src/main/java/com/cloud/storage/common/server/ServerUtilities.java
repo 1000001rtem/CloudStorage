@@ -40,7 +40,6 @@ public class ServerUtilities implements Directorys {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println(Arrays.toString(baos.toByteArray()));
         return baos.toByteArray();
     }
 }

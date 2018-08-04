@@ -4,6 +4,7 @@ import com.cloud.storage.common.server.MyFile;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class FileTable extends DBHelper {
@@ -32,24 +33,49 @@ public class FileTable extends DBHelper {
         }
     }
 
-    public void createNewFile(MyFile file, int userId) {
-        try { //: todo: добавить проверку на существование
-            statement = connection.prepareStatement("INSERT INTO " + FILE_TABLE_NAME + "(" +
-                    USER_ID + ", " +
-                    FILE_NAME + ", " +
-                    FILE_SIZE + ", " +
-                    CHECKSUM + ", " +
-                    FILE_PATH + ") " +
-                    "VALUES (?,?,?,?,?);");
-            statement.setInt(1, userId);
-            statement.setString(2, file.getFileName());
-            statement.setInt(3, file.getBytes().length / 1024);
-            statement.setString(4, file.getCheckSum());
-            statement.setString(5, file.getPath());
-            statement.executeUpdate();
+    public boolean createNewFile(MyFile file, int userId) {
+        if (!isFileExists(file.getFileName(), userId)) {
+            try {
+                statement = connection.prepareStatement("INSERT INTO " + FILE_TABLE_NAME + "(" +
+                        USER_ID + ", " +
+                        FILE_NAME + ", " +
+                        FILE_SIZE + ", " +
+                        CHECKSUM + ", " +
+                        FILE_PATH + ") " +
+                        "VALUES (?,?,?,?,?);");
+                statement.setInt(1, userId);
+                statement.setString(2, file.getFileName());
+                statement.setInt(3, file.getBytes().length / 1024);
+                statement.setString(4, file.getCheckSum());
+                statement.setString(5, file.getPath());
+                statement.executeUpdate();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            return true;
+        }
+        return false;
+    }
+
+    private boolean isFileExists(String fileName, int userId){
+        try {
+            statement = connection.prepareStatement("SELECT " + FILE_NAME + " FROM " +
+                    FILE_TABLE_NAME + " WHERE (" +
+                    USER_ID + " = '" + userId + "' );");
+            statement.execute();
+            ResultSet resultSet = statement.getResultSet();
+            if (resultSet != null && !resultSet.isClosed()) {
+                while (resultSet.next()) {
+                    if(resultSet.getString(1).equals(fileName)){
+                        return true;
+                    }
+                }
+                return false;
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return false;
     }
 
     @Override

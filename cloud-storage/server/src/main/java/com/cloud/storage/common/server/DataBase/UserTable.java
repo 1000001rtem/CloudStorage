@@ -60,7 +60,7 @@ public class UserTable extends DBHelper {
                     LOGIN_COLUMN + " = '" + login + "' );");
             statement.execute();
             ResultSet resultSet = statement.getResultSet();
-            if (resultSet.isClosed()) return false;
+            if (resultSet == null && resultSet.isClosed()) return false;
             else return true;
         } catch (SQLException e) {
             e.printStackTrace();
