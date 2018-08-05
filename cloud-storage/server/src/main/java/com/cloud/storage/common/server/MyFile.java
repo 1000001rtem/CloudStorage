@@ -45,7 +45,6 @@ public class MyFile implements Directorys, Serializable {
     private boolean addFileInDB(int id) {
         table = new FileTable();
         boolean result = table.createNewFile(this, id);
-        table.disconnectDb();
         return result;
     }
 

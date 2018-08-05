@@ -1,6 +1,7 @@
 package com.cloud.storage.common.server;
 
 import com.cloud.storage.common.ServiceCommands;
+import com.cloud.storage.common.server.DataBase.DBHelper;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -12,7 +13,7 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 
 public class ServerMainClass implements ServiceCommands {
     public void run() throws Exception {
-
+        DBHelper.getInstance().connect();
         EventLoopGroup bossGroup = new NioEventLoopGroup();
         EventLoopGroup workerGroup = new NioEventLoopGroup();
         try {
@@ -31,6 +32,7 @@ public class ServerMainClass implements ServiceCommands {
 
             f.channel().closeFuture().sync();
         } finally {
+            DBHelper.getInstance().disconnectDb();
             workerGroup.shutdownGracefully();
             bossGroup.shutdownGracefully();
         }

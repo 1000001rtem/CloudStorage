@@ -28,9 +28,7 @@ public class User implements Directorys {
 
     private String getNickNameFromDB() {
         table = new UserTable();
-        String result = table.getNickName(this.login);
-        table.disconnectDb();
-        return result;
+        return table.getNickName(this.login);
     }
 
     public void setNickName(String nickName) {
@@ -61,7 +59,6 @@ public class User implements Directorys {
         } else {
             System.out.println("user exist");
         }
-        table.disconnectDb();
     }
 
     private boolean isUserExists(UserTable table) {
@@ -70,15 +67,11 @@ public class User implements Directorys {
 
     public boolean authorization() {
         table = new UserTable();
-        boolean result = table.checkAuth(this.login, this.password);
-        table.disconnectDb();
-        return result;
+        return table.checkAuth(this.login, this.password);
     }
 
     public int getId() {
         table = new UserTable();
-        int result = table.getUserId(this.nickName);
-        table.disconnectDb();
-        return result;
+        return table.getUserId(this.nickName);
     }
 }

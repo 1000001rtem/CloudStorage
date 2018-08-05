@@ -26,11 +26,17 @@ public class FileHandler implements Directorys, ServiceCommands {
     private void createFile(FileMessage message) {
         MessageDecoder decoder = new MessageDecoder();
         MyFile myFile = decoder.getFile(message);
-        if (myFile.addFile(user.getId())) {
-            ctx.write(encoder.getFileListMessage(ServerUtilities.getFileList()));
-            ctx.flush();
-        } else{
-            ctx.write(encoder.getMessage(FILE_EXIST));
+        int userId = user.getId();
+        if(userId != -1) {
+            if (myFile.addFile(userId)) {
+                ctx.write(encoder.getFileListMessage(ServerUtilities.getFileList()));
+                ctx.flush();
+            } else {
+                ctx.write(encoder.getMessage(FILE_EXIST));
+                ctx.flush();
+            }
+        } else {
+            ctx.write(encoder.getMessage(ERROR));
             ctx.flush();
         }
     }
