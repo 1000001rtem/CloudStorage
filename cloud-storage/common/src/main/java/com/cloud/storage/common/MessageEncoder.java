@@ -1,12 +1,9 @@
 package com.cloud.storage.common;
 
-import javafx.collections.ObservableList;
-
 import java.io.*;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
 
 
 // Стрктура сообщения с файлом:
@@ -46,25 +43,24 @@ import java.util.Arrays;
 // байты имени файла
 
 public class MessageEncoder implements ServiceCommands {
-    private byte[] fileBytes;
-    private byte[] nameBytes;
-    private byte[] checkSumBytes;
+
 
     public byte[] getMessage(File file) {
+        byte[] fileBytes;
+        byte[] nameBytes;
+        byte[] checkSumBytes;
         byte[] messageBytes;
-        this.nameBytes = file.getName().getBytes();
-        this.fileBytes = new byte[(int) file.length()];
-        getFileBytes(file);
-        this.checkSumBytes = getMD5(fileBytes);
+        nameBytes = file.getName().getBytes();
+        fileBytes = new byte[(int) file.length()];
+        readFileBytes(file, fileBytes);
+        checkSumBytes = getMD5(fileBytes);
         messageBytes = new byte[nameBytes.length + fileBytes.length + checkSumBytes.length + 3];
 
         String size = String.valueOf(messageBytes.length);
-        messageBytes = new byte[messageBytes.length + 1 + size.length()];
-        System.arraycopy(size.getBytes(), 0, messageBytes, 0, size.getBytes().length);
-        messageBytes[size.getBytes().length] = FILE_SIZE_SEPARATE;
+        messageBytes = addMessageSizeInfo(messageBytes, size);
 
         messageBytes[size.getBytes().length + 1] = FILE_CODE;
-        collectBytes(messageBytes, size.getBytes().length);
+        collectBytes(messageBytes, size.getBytes().length, nameBytes, checkSumBytes, fileBytes);
         return messageBytes;
     }
 
@@ -81,9 +77,7 @@ public class MessageEncoder implements ServiceCommands {
         byte[] messageBytes = new byte[MD5_CODE_LENGTH * 2 + 1];
 
         String size = String.valueOf(messageBytes.length);
-        messageBytes = new byte[messageBytes.length + 1 + size.length()];
-        System.arraycopy(size.getBytes(), 0, messageBytes, 0, size.getBytes().length);
-        messageBytes[size.getBytes().length] = FILE_SIZE_SEPARATE;
+        messageBytes = addMessageSizeInfo(messageBytes, size);
 
         messageBytes[size.getBytes().length + 1] = AUTHORIZATION_CODE;
         System.arraycopy(getMD5(login.getBytes()), 0, messageBytes, size.getBytes().length + 2, MD5_CODE_LENGTH);
@@ -95,9 +89,7 @@ public class MessageEncoder implements ServiceCommands {
         byte[] messageBytes = new byte[MD5_CODE_LENGTH * 2 + 1 + nickName.getBytes().length];
 
         String size = String.valueOf(messageBytes.length);
-        messageBytes = new byte[messageBytes.length + 1 + size.length()];
-        System.arraycopy(size.getBytes(), 0, messageBytes, 0, size.getBytes().length);
-        messageBytes[size.getBytes().length] = FILE_SIZE_SEPARATE;
+        messageBytes = addMessageSizeInfo(messageBytes, size);
 
         messageBytes[size.getBytes().length + 1] = REGISTRATION_CODE;
         System.arraycopy(getMD5(login.getBytes()), 0, messageBytes, size.getBytes().length + 2, MD5_CODE_LENGTH);
@@ -110,9 +102,7 @@ public class MessageEncoder implements ServiceCommands {
         byte[] messageBytes = new byte[2 + fileName.getBytes().length];
 
         String size = String.valueOf(messageBytes.length);
-        messageBytes = new byte[messageBytes.length + 1 + size.getBytes().length];
-        System.arraycopy(size.getBytes(), 0, messageBytes, 0, size.getBytes().length);
-        messageBytes[size.getBytes().length] = FILE_SIZE_SEPARATE;
+        messageBytes = addMessageSizeInfo(messageBytes, size);
 
         messageBytes[size.getBytes().length + 1] = COMMAND_CODE;
         messageBytes[size.getBytes().length + 2] = DOWNLOAD_FILE_FROM_SERVER;
@@ -120,22 +110,27 @@ public class MessageEncoder implements ServiceCommands {
         return messageBytes;
     }
 
-    public byte[] getFileListMessage(byte [] arr){
+    public byte[] getFileListMessage(byte[] arr) {
         byte[] messageBytes = new byte[arr.length + 1];
 
         String size = String.valueOf(messageBytes.length);
-        messageBytes = new byte[messageBytes.length + 1 + size.getBytes().length];
-        System.arraycopy(size.getBytes(), 0, messageBytes, 0, size.getBytes().length);
-        messageBytes[size.getBytes().length] = FILE_SIZE_SEPARATE;
+        messageBytes = addMessageSizeInfo(messageBytes, size);
 
         messageBytes[size.getBytes().length + 1] = FILE_LIST_CODE;
         System.arraycopy(arr, 0, messageBytes, size.getBytes().length + 2, arr.length);
         return messageBytes;
     }
 
-    private void getFileBytes(File file) {
+    private byte[] addMessageSizeInfo(byte[] messageBytes, String size) {
+        messageBytes = new byte[messageBytes.length + 1 + size.getBytes().length];
+        System.arraycopy(size.getBytes(), 0, messageBytes, 0, size.getBytes().length);
+        messageBytes[size.getBytes().length] = FILE_SIZE_SEPARATE;
+        return messageBytes;
+    }
+
+    private void readFileBytes(File file, byte[] fileBytes) {
         try (BufferedInputStream in = new BufferedInputStream(new FileInputStream(file))) {
-            in.read(this.fileBytes);
+            in.read(fileBytes);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -143,11 +138,11 @@ public class MessageEncoder implements ServiceCommands {
         }
     }
 
-    private void collectBytes(byte[] messageBytes, int size) {
-        System.arraycopy(this.nameBytes, 0, messageBytes, 2 + size, this.nameBytes.length);
+    private void collectBytes(byte[] messageBytes, int size, byte[] nameBytes, byte[] checkSumBytes, byte[] fileBytes) {
+        System.arraycopy(nameBytes, 0, messageBytes, 2 + size, nameBytes.length);
         messageBytes[2 + nameBytes.length + size] = SEPARATE_CODE;
-        System.arraycopy(this.checkSumBytes, 0, messageBytes, 3 + this.nameBytes.length + size, checkSumBytes.length);
-        System.arraycopy(this.fileBytes, 0, messageBytes, 3 + this.nameBytes.length + size + this.checkSumBytes.length, this.fileBytes.length);
+        System.arraycopy(checkSumBytes, 0, messageBytes, 3 + nameBytes.length + size, checkSumBytes.length);
+        System.arraycopy(fileBytes, 0, messageBytes, 3 + nameBytes.length + size + checkSumBytes.length, fileBytes.length);
     }
 
     private static byte[] getMD5(byte[] arr) {
