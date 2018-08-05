@@ -21,5 +21,5 @@ public interface ServiceCommands {
 
     byte MD5_CODE_LENGTH = 16;
 
-    int SERVER_PORT = 8189;
+    int SERVER_PORT = 8190;
 }

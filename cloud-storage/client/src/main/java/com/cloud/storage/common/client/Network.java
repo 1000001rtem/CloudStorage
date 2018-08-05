@@ -112,6 +112,11 @@ public class Network implements ServiceCommands {
         rusume();
     }
 
+    public void sendRegInfo(){
+        queue.insert(encoder.getMessage("1000001rtem", "login", "pass"));
+        rusume();
+    }
+
     public void sendFile(File file) {
         queue.insert(encoder.getMessage(file));
         rusume();

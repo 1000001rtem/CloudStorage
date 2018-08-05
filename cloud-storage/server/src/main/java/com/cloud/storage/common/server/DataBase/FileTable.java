@@ -7,7 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class FileTable extends DBHelper {
+public class FileTable implements SQLConstants{
     private Connection connection;
     private PreparedStatement statement;
 
@@ -20,7 +20,7 @@ public class FileTable extends DBHelper {
             FILE_PATH + " TEXT);";
 
     public FileTable() {
-        this.connection = connect();
+        this.connection = DBHelper.getInstance().getConnection();
         createTableIfNotExists();
     }
 
@@ -30,6 +30,12 @@ public class FileTable extends DBHelper {
             statement.execute();
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                statement.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -51,6 +57,13 @@ public class FileTable extends DBHelper {
                 statement.executeUpdate();
             } catch (SQLException e) {
                 e.printStackTrace();
+                return false;
+            } finally {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
             return true;
         }
@@ -74,23 +87,14 @@ public class FileTable extends DBHelper {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                statement.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return false;
-    }
-
-    @Override
-    protected Connection connect() {
-        return super.connect();
-    }
-
-    @Override
-    public void disconnectDb() {
-        super.disconnectDb();
-        try {
-            statement.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 }
 

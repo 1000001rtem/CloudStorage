@@ -7,7 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class UserTable extends DBHelper {
+public class UserTable implements SQLConstants {
 
     private Connection connection;
     private PreparedStatement statement;
@@ -19,13 +19,8 @@ public class UserTable extends DBHelper {
             PASSWORD_COLUMN + " INTEGER);";
 
     public UserTable() {
-        this.connection = connect();
+        this.connection = DBHelper.getInstance().getConnection();
         createTableIfNotExists();
-    }
-
-    @Override
-    protected Connection connect() {
-        return super.connect();
     }
 
     private void createTableIfNotExists() {
@@ -34,9 +29,14 @@ public class UserTable extends DBHelper {
             statement.execute();
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                statement.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
-
     public void createNewUser(User user) {
         try {
             statement = connection.prepareStatement("INSERT INTO " + USER_TABLE_NAME + "(" +
@@ -50,6 +50,12 @@ public class UserTable extends DBHelper {
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                statement.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -60,10 +66,16 @@ public class UserTable extends DBHelper {
                     LOGIN_COLUMN + " = '" + login + "' );");
             statement.execute();
             ResultSet resultSet = statement.getResultSet();
-            if (resultSet == null && resultSet.isClosed()) return false;
+            if (resultSet == null || resultSet.isClosed() || !resultSet.next()) return false;
             else return true;
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                statement.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return false;
     }
@@ -81,6 +93,12 @@ public class UserTable extends DBHelper {
             } else return false;
         } catch (SQLException e) {
             e.printStackTrace();
+        }finally {
+            try {
+                statement.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return false;
     }
@@ -98,6 +116,12 @@ public class UserTable extends DBHelper {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                statement.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return null;
     }
@@ -113,17 +137,13 @@ public class UserTable extends DBHelper {
             return resultSet.getInt(1);
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                statement.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return -1;
-    }
-
-    @Override
-    public void disconnectDb() {
-        super.disconnectDb();
-        try {
-            this.statement.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 }

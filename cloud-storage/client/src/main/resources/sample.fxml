@@ -25,7 +25,7 @@
             </TextField>
             <PasswordField fx:id="passArea" promptText="Password"/>
             <Button fx:id="loginBtn" text="Login" maxWidth="Infinity" onAction="#authAction"/>
-            <Hyperlink fx:id="registrationLink" maxWidth="Infinity" text="Registration"/>
+            <Button fx:id="regBtn" text="Reg" maxWidth="Infinity" onAction="#regAction"/>
         </HBox>
     </Pane>
     <HBox alignment="center" VBox.vgrow="ALWAYS">
