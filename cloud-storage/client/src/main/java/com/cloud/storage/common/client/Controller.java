@@ -70,6 +70,10 @@ public class Controller implements Directorys {
         //pane.getChildren().add(box);
     }
 
+    public void regAction(){
+        network.sendRegInfo();
+    }
+
     public void sendFile() {
         File file = new File(CLIENT_DIRECTORY + "/" + clientTable.getSelectionModel().getSelectedItem().getFileName());
         network.sendFile(file);

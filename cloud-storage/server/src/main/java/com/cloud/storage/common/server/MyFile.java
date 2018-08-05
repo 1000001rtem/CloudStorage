@@ -19,6 +19,7 @@ public class MyFile implements Directorys, Serializable {
         this.bytes = bytes;
         this.fileSize = String.valueOf(bytes.length/1024) + " kb";
         this.path = SERVER_DIRECTORY + "/" + this.getFileName();
+        this.table = new FileTable();
     }
 
     public MyFile(String fileName, long fileSize) {
@@ -43,7 +44,6 @@ public class MyFile implements Directorys, Serializable {
     }
 
     private boolean addFileInDB(int id) {
-        table = new FileTable();
         boolean result = table.createNewFile(this, id);
         return result;
     }

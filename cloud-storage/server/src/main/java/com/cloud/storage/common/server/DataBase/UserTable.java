@@ -66,7 +66,7 @@ public class UserTable implements SQLConstants {
                     LOGIN_COLUMN + " = '" + login + "' );");
             statement.execute();
             ResultSet resultSet = statement.getResultSet();
-            if (resultSet == null && resultSet.isClosed()) return false;
+            if (resultSet == null || resultSet.isClosed() || !resultSet.next()) return false;
             else return true;
         } catch (SQLException e) {
             e.printStackTrace();
