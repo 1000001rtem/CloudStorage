@@ -17,6 +17,12 @@ public class Network implements ServiceCommands {
     private Controller controller;
     private MessageEncoder encoder;
 
+    private static Network ourInstance = new Network();
+
+    public static Network getInstance() {
+        return ourInstance;
+    }
+
     public Network(Controller controller) {
         this.encoder = new MessageEncoder();
         this.controller = controller;
