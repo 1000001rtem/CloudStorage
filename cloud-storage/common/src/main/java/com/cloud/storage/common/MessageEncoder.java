@@ -145,7 +145,7 @@ public class MessageEncoder implements ServiceCommands {
         System.arraycopy(fileBytes, 0, messageBytes, 3 + nameBytes.length + size + checkSumBytes.length, fileBytes.length);
     }
 
-    private static byte[] getMD5(byte[] arr) {
+    public static byte[] getMD5(byte[] arr) {
         MessageDigest messageDigest = null;
         byte[] digest = arr;
 
@@ -175,5 +175,14 @@ public class MessageEncoder implements ServiceCommands {
         }
         md5Hex = md5Hex.substring(0, 32);
         return md5Hex;
+    }
+
+    public static void print(byte [] arr){
+        for (int i = 0; i < 50; i++) {
+            if(i%10==0) System.out.println();
+            System.out.print(arr[i]);
+        }
+        System.out.println(arr[arr.length-1]);
+        System.out.println(arr.length);
     }
 }

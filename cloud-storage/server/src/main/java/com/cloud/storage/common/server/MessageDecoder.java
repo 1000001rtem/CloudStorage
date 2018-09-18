@@ -8,11 +8,14 @@ import com.cloud.storage.common.message.CommandMessage;
 import com.cloud.storage.common.message.FileMessage;
 import com.cloud.storage.common.message.RegistrationMessage;
 
+import java.io.FileNotFoundException;
+import java.nio.file.NoSuchFileException;
 import java.util.Arrays;
+import java.util.NoSuchElementException;
 
 public class MessageDecoder implements ServiceCommands {
 
-    public MyFile getFile(FileMessage message) {
+    public MyFile getFile(FileMessage message) throws FileNotFoundException{
         byte[] bytes = message.getBytes();
         StringBuffer fileName = new StringBuffer();
         int count = 0;
@@ -27,9 +30,12 @@ public class MessageDecoder implements ServiceCommands {
         String checkSumString = MessageEncoder.getMD5String(checkSum);
         count += MD5_CODE_LENGTH;
 
-        byte[] fileBytes = Arrays.copyOfRange(bytes, count+1, bytes.length);
-
-        return new MyFile(fileName.toString(), checkSumString, fileBytes);
+        byte[] fileBytes = Arrays.copyOfRange(bytes, count+1, bytes.length-1);
+        System.out.println(MessageEncoder.getMD5String(MessageEncoder.getMD5(fileBytes)).equals(checkSumString));
+        if(MessageEncoder.getMD5String(MessageEncoder.getMD5(fileBytes)).equals(checkSumString)) {
+            return new MyFile(fileName.toString(), checkSumString, fileBytes);
+        }
+        throw new FileNotFoundException("CheckSumm not equals");
     }
 
     public byte getCommand(CommandMessage message) {

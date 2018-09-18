@@ -6,6 +6,8 @@ import com.cloud.storage.common.ServiceCommands;
 import com.cloud.storage.common.message.FileMessage;
 import io.netty.channel.ChannelHandlerContext;
 
+import java.io.FileNotFoundException;
+
 public class FileHandler implements Directorys, ServiceCommands {
 
     private ChannelHandlerContext ctx;
@@ -25,7 +27,15 @@ public class FileHandler implements Directorys, ServiceCommands {
 
     private void createFile(FileMessage message) {
         MessageDecoder decoder = new MessageDecoder();
-        MyFile myFile = decoder.getFile(message);
+        MyFile myFile = null;
+        try {
+            myFile = decoder.getFile(message);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            ctx.write(encoder.getMessage(ERROR));
+            ctx.flush();
+            return;
+        }
         int userId = user.getId();
         if(userId != -1) {
             if (myFile.addFile(userId)) {
