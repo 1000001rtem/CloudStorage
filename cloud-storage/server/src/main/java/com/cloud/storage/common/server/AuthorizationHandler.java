@@ -24,21 +24,17 @@ public class AuthorizationHandler extends ChannelInboundHandlerAdapter implement
             User user  = decoder.getUser(message);
             if (user.authorization()){
                 System.out.println("welcome");
-                ctx.write(encoder.getMessage(AUTH_SUCCESS));
-                ctx.flush();
-                ctx.write(encoder.getFileListMessage(ServerUtilities.getFileList()));
-                ctx.flush();
+                ServerUtilities.sendMessageToClient(ctx, encoder.getMessage(AUTH_SUCCESS));
+                ServerUtilities.sendMessageToClient(ctx, encoder.getFileListMessage(ServerUtilities.getFileList()));
                 ctx.pipeline().addLast(new SortHandler(user));
                 ctx.pipeline().remove(this);
             }
             else {
-                ctx.write(encoder.getMessage(WRONG_LOG_OR_PASS));
-                ctx.flush();
+                ServerUtilities.sendMessageToClient(ctx, encoder.getMessage(WRONG_LOG_OR_PASS));
             }
         }
         else {
-            ctx.write(encoder.getMessage(ERROR));
-            ctx.flush();
+            ServerUtilities.sendMessageToClient(ctx, encoder.getMessage(ERROR));
         }
     }
 }

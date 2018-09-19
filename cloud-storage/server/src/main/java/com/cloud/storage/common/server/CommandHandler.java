@@ -30,16 +30,6 @@ public class CommandHandler implements ServiceCommands, Directorys {
 
     private void sendFileToClient() {
         File file = new File(SERVER_DIRECTORY + "/" + decoder.getFileName(this.message));
-        System.out.println(encoder.getMessage(file)[encoder.getMessage(file).length - 15]);
-        ctx.write(encoder.getMessage(file));
-        ctx.flush();
-    }
-
-    public static void print(byte[] arr, int size) {
-        for (int i = 0; i < size; i++) {
-            System.out.print(" " + arr[i]);
-            if (i % 15 == 0) System.out.println();
-        }
-        // System.out.println();
+        ServerUtilities.sendMessageToClient(ctx, encoder.getMessage(file));
     }
 }

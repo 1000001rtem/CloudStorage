@@ -2,6 +2,7 @@ package com.cloud.storage.common.server;
 
 import com.cloud.storage.common.Directorys;
 import com.cloud.storage.common.FileInfo;
+import io.netty.channel.ChannelHandlerContext;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -41,6 +42,11 @@ public class ServerUtilities implements Directorys {
             e.printStackTrace();
         }
         return baos.toByteArray();
+    }
+
+    public static void sendMessageToClient(ChannelHandlerContext ctx, byte [] message){
+        ctx.write(message);
+        ctx.flush();
     }
 }
 

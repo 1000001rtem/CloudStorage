@@ -14,12 +14,18 @@ public class Network implements ServiceCommands {
     private DataInputStream in = null;
     private SendQueue queue;
     private boolean flag = true;
-    private Controller controller;
     private MessageEncoder encoder;
 
-    public Network(Controller controller) {
+    private Controllers controller;
+
+    private static Network ourInstance = new Network();
+
+    public static Network getInstance() {
+        return ourInstance;
+    }
+
+    public Network() {
         this.encoder = new MessageEncoder();
-        this.controller = controller;
         try {
             this.socket = new Socket("localhost", SERVER_PORT);
             this.out = new DataOutputStream(socket.getOutputStream());
@@ -136,5 +142,9 @@ public class Network implements ServiceCommands {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void setController(Controllers controller) {
+        this.controller = controller;
     }
 }

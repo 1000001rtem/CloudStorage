@@ -5,8 +5,10 @@ import com.cloud.storage.common.message.CommandMessage;
 
 public class CommandHandler implements ServiceCommands {
     private CommandMessage message;
+    Controllers controller;
 
-    public CommandHandler(CommandMessage message) {
+    public CommandHandler(CommandMessage message, Controllers controller) {
+        this.controller = controller;
         this.message = message;
         if(message != null){
             processCommand (this.message);
@@ -31,6 +33,7 @@ public class CommandHandler implements ServiceCommands {
                 System.out.println("Wrong login or Password");
                 break;
             case AUTH_SUCCESS:
+                controller.changeScene();
                 System.out.println("Welcome");
                 break;
             case REG_SUCCESS:
