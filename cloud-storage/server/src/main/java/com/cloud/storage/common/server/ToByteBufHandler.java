@@ -12,8 +12,6 @@ import java.util.Arrays;
 public class ToByteBufHandler extends ChannelOutboundHandlerAdapter {
     @Override
     public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) throws Exception {
-        //String str = (String) msg;
-        //byte[] arr = str.getBytes();
         byte[] arr = (byte[])msg;
         ByteBufAllocator al = new PooledByteBufAllocator();
         ByteBuf buf = al.buffer(arr.length);

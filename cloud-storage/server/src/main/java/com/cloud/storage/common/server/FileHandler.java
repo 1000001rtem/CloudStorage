@@ -32,22 +32,18 @@ public class FileHandler implements Directorys, ServiceCommands {
             myFile = decoder.getFile(message);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
-            ctx.write(encoder.getMessage(ERROR));
-            ctx.flush();
+            ServerUtilities.sendMessageToClient(ctx, encoder.getMessage(ERROR));
             return;
         }
         int userId = user.getId();
         if(userId != -1) {
             if (myFile.addFile(userId)) {
-                ctx.write(encoder.getFileListMessage(ServerUtilities.getFileList()));
-                ctx.flush();
+                ServerUtilities.sendMessageToClient(ctx, encoder.getFileListMessage(ServerUtilities.getFileList()));
             } else {
-                ctx.write(encoder.getMessage(FILE_EXIST));
-                ctx.flush();
+                ServerUtilities.sendMessageToClient(ctx, encoder.getMessage(FILE_EXIST));
             }
         } else {
-            ctx.write(encoder.getMessage(ERROR));
-            ctx.flush();
+            ServerUtilities.sendMessageToClient(ctx, encoder.getMessage(ERROR));
         }
     }
 }

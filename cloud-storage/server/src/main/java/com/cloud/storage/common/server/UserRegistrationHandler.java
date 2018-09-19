@@ -17,6 +17,5 @@ public class UserRegistrationHandler implements ServiceCommands {
 
         this.user = decoder.getUser(message);
         user.createNewUser();
-
     }
 }
