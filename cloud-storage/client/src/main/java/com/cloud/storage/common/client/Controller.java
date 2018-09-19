@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -64,26 +65,19 @@ public class Controller implements Directorys, Controllers {
         network.downLoadFile(serverTable.getSelectionModel().getSelectedItem().getPath());
     }
 
-    public void deleteLocalFile (){
+    public void deleteLocalFile() {
         try {
             Files.delete(Paths.get(clientTable.getSelectionModel().getSelectedItem().getPath()));
-            refreshLocalFilesTable();
+            ClientUtilities.refreshClientFileList();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void refreshLocalFilesTable() {
-        if (Platform.isFxApplicationThread()) {
-            ClientUtilities.clearClientFileList();
-            ClientUtilities.fillClientTableList();
-        } else {
-            Platform.runLater(() -> {
-                ClientUtilities.clearClientFileList();
-                ClientUtilities.fillClientTableList();
-            });
-        }
+    public void deleteServerFile() {
+        network.deleteFileFromServer(serverTable.getSelectionModel().getSelectedItem().getPath());
     }
+
 
     @Override
     public void changeScene() {

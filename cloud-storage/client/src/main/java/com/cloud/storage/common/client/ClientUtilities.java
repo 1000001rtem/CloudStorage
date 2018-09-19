@@ -64,7 +64,21 @@ public class ClientUtilities implements Directorys {
         return serverTableList;
     }
 
-    public static void clearClientFileList (){
+    private static void clearClientFileList (){
         clientTableList.clear();
+    }
+
+    private static void clearServerFileList (){
+        serverTableList.clear();
+    }
+
+    public static void refreshClientFileList(){
+        clearClientFileList();
+        fillClientTableList();
+    }
+
+    public static void refreshServerFileList(byte [] message){
+        clearServerFileList();
+        fillServerTable(message);
     }
 }

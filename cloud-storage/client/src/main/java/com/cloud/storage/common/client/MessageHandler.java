@@ -15,7 +15,7 @@ import java.util.ArrayList;
 
 
 public class MessageHandler implements ServiceCommands {
-    private byte []message;
+    private byte[] message;
     private MessageDecoder decoder;
     private Controllers controller;
 
@@ -38,6 +38,10 @@ public class MessageHandler implements ServiceCommands {
             case FILE_LIST_CODE:
                 FileListMessage fileListMessage = new FileListMessage(message);
                 ClientUtilities.fillServerTable(new FileListMessage(message).getBytes());
+                break;
+            default:
+                System.out.println("Invalid Command");
+
         }
     }
 }

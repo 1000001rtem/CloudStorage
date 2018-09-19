@@ -18,7 +18,7 @@ public class MyFile implements Directorys, Serializable {
         this.checkSum = checkSum;
         this.bytes = bytes;
         this.fileSize = String.valueOf(bytes.length/1024) + " kb";
-        this.path = SERVER_DIRECTORY + "/" + this.getFileName();
+        this.path = SERVER_DIRECTORY + "\\" + this.getFileName();
         this.table = new FileTable();
     }
 

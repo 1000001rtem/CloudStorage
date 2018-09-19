@@ -29,32 +29,32 @@
             </TableView>
             <HBox>
                 <children>
-            <Button minWidth="-Infinity" onAction="#sendFile" text="Send" textOverrun="CLIP"
-                    maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
-            <Button onAction="#deleteLocalFile" text="Delete" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
-            </children>
+                    <Button minWidth="-Infinity" onAction="#sendFile" text="Send" textOverrun="CLIP"
+                            maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+                    <Button onAction="#deleteLocalFile" text="Delete" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+                </children>
             </HBox>
         </VBox>
 
-       <VBox>
-           <TableView fx:id="serverTable">
-               <columns>
-                   <TableColumn fx:id="nameColumnServer" text="Name"/>
-                   <TableColumn fx:id="sizeColumnServer" text="Size"/>
-               </columns>
-               <columnResizePolicy>
-                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
-               </columnResizePolicy>
-           </TableView>
-           <HBox>
-               <children>
-                   <Button minWidth="-Infinity" onAction="#loadFile" text="Load" textOverrun="CLIP"
-                           maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
-                   <Button  text="Delete" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
-               </children>
-           </HBox>
+        <VBox>
+            <TableView fx:id="serverTable">
+                <columns>
+                    <TableColumn fx:id="nameColumnServer" text="Name"/>
+                    <TableColumn fx:id="sizeColumnServer" text="Size"/>
+                </columns>
+                <columnResizePolicy>
+                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                </columnResizePolicy>
+            </TableView>
+            <HBox>
+                <children>
+                    <Button minWidth="-Infinity" onAction="#loadFile" text="Load" textOverrun="CLIP"
+                            maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+                    <Button onAction="#deleteServerFile" text="Delete" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+                </children>
+            </HBox>
 
-       </VBox>
+        </VBox>
 
 
     </HBox>

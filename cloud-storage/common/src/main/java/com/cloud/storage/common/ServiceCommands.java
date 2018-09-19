@@ -18,6 +18,7 @@ public interface ServiceCommands {
     byte REG_SUCCESS = 5;
     byte USER_EXIST = 6;
     byte FILE_EXIST = 7;
+    byte DELETE_SUCCESS = 8;
 
 
     byte MD5_CODE_LENGTH = 16;
