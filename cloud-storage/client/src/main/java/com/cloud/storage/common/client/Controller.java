@@ -61,7 +61,7 @@ public class Controller implements Directorys, Controllers {
     }
 
     public void loadFile() {
-        network.downLoadFile(serverTable.getSelectionModel().getSelectedItem().getFileName());
+        network.downLoadFile(serverTable.getSelectionModel().getSelectedItem().getPath());
     }
 
     public void deleteLocalFile (){

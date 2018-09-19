@@ -29,7 +29,7 @@ public class CommandHandler implements ServiceCommands, Directorys {
     }
 
     private void sendFileToClient() {
-        File file = new File(SERVER_DIRECTORY + "/" + decoder.getFileName(this.message));
+        File file = new File(decoder.getFilePath(this.message));
         ServerUtilities.sendMessageToClient(ctx, encoder.getMessage(file));
     }
 }

@@ -7,16 +7,17 @@ public interface ServiceCommands {
     byte CLOSE_CONNECTION = -6;
     byte SEPARATE_CODE = -5;
     byte DOWNLOAD_FILE_FROM_SERVER = -4;
-    byte COMMAND_CODE = -3;
-    byte FILE_CODE = -2;
-    byte FILE_LIST_CODE = 0;
+    byte DELETE_FILE_FROM_SERVER = -3;
+    byte COMMAND_CODE = -2;
+    byte FILE_CODE = 0;
+    byte FILE_LIST_CODE = 1;
 
-    byte ERROR = 1;
-    byte WRONG_LOG_OR_PASS = 2;
-    byte AUTH_SUCCESS = 3;
-    byte REG_SUCCESS = 4;
-    byte USER_EXIST = 5;
-    byte FILE_EXIST = 6;
+    byte ERROR = 2;
+    byte WRONG_LOG_OR_PASS = 3;
+    byte AUTH_SUCCESS = 4;
+    byte REG_SUCCESS = 5;
+    byte USER_EXIST = 6;
+    byte FILE_EXIST = 7;
 
 
     byte MD5_CODE_LENGTH = 16;
