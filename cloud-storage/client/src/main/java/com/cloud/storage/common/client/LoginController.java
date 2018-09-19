@@ -48,7 +48,7 @@ public class LoginController implements Controllers {
 
     private void change() {
         try {
-            Parent mainScene = FXMLLoader.load(getClass().getResource("/sample.fxml"));
+            Parent mainScene = FXMLLoader.load(getClass().getResource("/main.fxml"));
             ((Stage) rootNode.getScene().getWindow()).setScene(new Scene(mainScene));
         } catch (IOException e) {
             e.printStackTrace();
