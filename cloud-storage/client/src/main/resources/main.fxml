@@ -31,7 +31,7 @@
                 <children>
             <Button minWidth="-Infinity" onAction="#sendFile" text="Send" textOverrun="CLIP"
                     maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
-            <Button  text="Delete" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+            <Button onAction="#deleteLocalFile" text="Delete" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
             </children>
             </HBox>
         </VBox>

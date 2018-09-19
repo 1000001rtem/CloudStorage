@@ -21,7 +21,7 @@ public class ServerUtilities implements Directorys {
             Files.walkFileTree(path, new SimpleFileVisitor<Path>() {
                 @Override
                 public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-                    list.add(new FileInfo(file.getFileName().toString(), file.toFile().length()));
+                    list.add(new FileInfo(file.getFileName().toString(), file.toFile().length(), file.toFile().getAbsolutePath()));
                     return FileVisitResult.CONTINUE;
                 }
             });
