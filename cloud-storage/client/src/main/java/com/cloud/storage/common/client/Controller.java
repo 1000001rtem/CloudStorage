@@ -13,7 +13,7 @@ import javafx.scene.layout.Pane;
 
 import java.io.File;
 
-public class Controller implements Directorys {
+public class Controller implements Directorys, Controllers {
 
     @FXML
     TableView<FileInfo> clientTable;
@@ -45,7 +45,7 @@ public class Controller implements Directorys {
     @FXML
     PasswordField passArea;
 
-    Network network = new Network(this);
+    Network network = Network.getInstance();
 
     @FXML
     public void initialize() {
@@ -82,6 +82,11 @@ public class Controller implements Directorys {
 
     public void loadFile() {
         network.downLoadFile(serverTable.getSelectionModel().getSelectedItem().getFileName());
+    }
+
+    @Override
+    public void changeScene() {
+
     }
 
 //    public void loginMeth (){

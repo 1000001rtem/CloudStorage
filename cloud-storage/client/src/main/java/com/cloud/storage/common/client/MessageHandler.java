@@ -17,11 +17,11 @@ import java.util.ArrayList;
 public class MessageHandler implements ServiceCommands {
     private byte []message;
     private MessageDecoder decoder;
-    private Controller controller;
+    private Controllers controller;
 
-    public MessageHandler(byte[] message, Controller controller) {
-        this.controller = controller;
+    public MessageHandler(byte[] message, Controllers controller) {
         this.message = message;
+        this.controller = controller;
         sortMessage();
     }
 
@@ -33,7 +33,7 @@ public class MessageHandler implements ServiceCommands {
                 break;
             case COMMAND_CODE:
                 CommandMessage commandMessage = new CommandMessage(message);
-                new CommandHandler(commandMessage);
+                new CommandHandler(commandMessage, controller);
                 break;
             case FILE_LIST_CODE:
                 FileListMessage fileListMessage = new FileListMessage(message);
