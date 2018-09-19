@@ -3,14 +3,9 @@ package com.cloud.storage.common.client;
 import com.cloud.storage.common.Directorys;
 import com.cloud.storage.common.FileInfo;
 import javafx.fxml.FXML;
-import javafx.scene.control.PasswordField;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-
 import java.io.File;
 
 public class Controller implements Directorys, Controllers {
@@ -33,22 +28,12 @@ public class Controller implements Directorys, Controllers {
     @FXML
     TableColumn<FileInfo, String> sizeColumnServer;
 
-    @FXML
-    Pane pane;
-
-    @FXML
-    HBox box;
-
-    @FXML
-    TextField loginArea;
-
-    @FXML
-    PasswordField passArea;
-
     Network network = Network.getInstance();
+
 
     @FXML
     public void initialize() {
+        network.setController(this);
         nameColumnClient.setCellValueFactory(new PropertyValueFactory<FileInfo, String>("fileName"));
         sizeColumnClient.setCellValueFactory(new PropertyValueFactory<FileInfo, String>("fileSize"));
         nameColumnServer.setCellValueFactory(new PropertyValueFactory<FileInfo, String>("fileName"));
@@ -61,17 +46,6 @@ public class Controller implements Directorys, Controllers {
     public void refreshTables() {
         clientTable.refresh();
         serverTable.refresh();
-    }
-
-    public void authAction() {
-        network.sendAuthInfo(loginArea.getText(), passArea.getText());
-        loginArea.clear();
-        passArea.clear();
-        //pane.getChildren().add(box);
-    }
-
-    public void regAction(){
-        network.sendRegInfo();
     }
 
     public void sendFile() {
@@ -88,8 +62,4 @@ public class Controller implements Directorys, Controllers {
     public void changeScene() {
 
     }
-
-//    public void loginMeth (){
-//        //pane.getChildren().remove(0,1);
-//    }
 }

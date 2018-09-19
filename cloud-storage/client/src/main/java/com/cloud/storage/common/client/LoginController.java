@@ -32,6 +32,11 @@ public class LoginController implements Controllers {
         passArea.clear();
     }
 
+    public void regAction(){
+        network.setController(this);
+        network.sendRegInfo();
+    }
+
     @Override
     public void changeScene() {
         if (!Platform.isFxApplicationThread()) {
