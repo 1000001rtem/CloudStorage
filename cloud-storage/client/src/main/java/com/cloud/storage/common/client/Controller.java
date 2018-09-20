@@ -2,20 +2,21 @@ package com.cloud.storage.common.client;
 
 import com.cloud.storage.common.Directorys;
 import com.cloud.storage.common.FileInfo;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.stream.Collectors;
 
 public class Controller implements Directorys, Controllers {
+
+    public static final Logger logger = LogManager.getLogger(Controller.class.getName());
 
     @FXML
     TableView<FileInfo> clientTable;
@@ -70,7 +71,7 @@ public class Controller implements Directorys, Controllers {
             Files.delete(Paths.get(clientTable.getSelectionModel().getSelectedItem().getPath()));
             ClientUtilities.refreshClientFileList();
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("Delete File", e);
         }
     }
 

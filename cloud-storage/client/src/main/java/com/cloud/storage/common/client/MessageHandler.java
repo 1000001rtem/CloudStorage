@@ -1,22 +1,18 @@
 package com.cloud.storage.common.client;
 
-import com.cloud.storage.common.FileInfo;
 import com.cloud.storage.common.ServiceCommands;
 import com.cloud.storage.common.message.CommandMessage;
 import com.cloud.storage.common.message.FileListMessage;
 import com.cloud.storage.common.message.FileMessage;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.util.ArrayList;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 
 public class MessageHandler implements ServiceCommands {
+
+    public static final Logger logger = LogManager.getLogger(MessageHandler.class.getName());
+
     private byte[] message;
-    private MessageDecoder decoder;
     private Controllers controller;
 
     public MessageHandler(byte[] message, Controllers controller) {
@@ -40,7 +36,7 @@ public class MessageHandler implements ServiceCommands {
                 ClientUtilities.fillServerTable(new FileListMessage(message).getBytes());
                 break;
             default:
-                System.out.println("Invalid Command");
+                logger.error("Invalid Command");
 
         }
     }

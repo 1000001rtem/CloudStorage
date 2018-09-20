@@ -1,10 +1,14 @@
 package com.cloud.storage.common.client;
 
 import com.cloud.storage.common.Directorys;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.*;
 
 public class MyFile implements Directorys {
+
+    public static final Logger logger = LogManager.getLogger(MyFile.class.getName());
 
     //todo: do ref
 
@@ -18,14 +22,14 @@ public class MyFile implements Directorys {
         this.fileName = fileName;
         this.checkSum = checkSum;
         this.bytes = bytes;
-        this.fileSize = String.valueOf(bytes.length/1024) + " kb";
+        this.fileSize = String.valueOf(bytes.length / 1024) + " kb";
         this.path = CLIENT_DIRECTORY + "\\" + this.getFileName();
         addFile();
     }
 
     public MyFile(String fileName, long fileSize) {
         this.fileName = fileName;
-        this.fileSize = String.valueOf(fileSize/1024) + " kb";
+        this.fileSize = String.valueOf(fileSize / 1024) + " kb";
     }
 
     private void addFile() {
@@ -33,9 +37,9 @@ public class MyFile implements Directorys {
         try (BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(file))) {
             stream.write(this.bytes);
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            logger.error("Create File", e);
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("Create File", e);
         }
     }
 

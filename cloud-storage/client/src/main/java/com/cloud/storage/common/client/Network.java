@@ -2,13 +2,17 @@ package com.cloud.storage.common.client;
 
 import com.cloud.storage.common.MessageEncoder;
 import com.cloud.storage.common.ServiceCommands;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class Network implements ServiceCommands {
+
+    public static final Logger logger = LogManager.getLogger(Network.class.getName());
+
     private Socket socket = null;
     private DataOutputStream out = null;
     private DataInputStream in = null;
@@ -31,7 +35,7 @@ public class Network implements ServiceCommands {
             this.out = new DataOutputStream(socket.getOutputStream());
             this.in = new DataInputStream(socket.getInputStream());
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("Connection", e);
         }
         this.queue = new SendQueue();
 
@@ -57,7 +61,7 @@ public class Network implements ServiceCommands {
                         }
                     }
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    logger.error("Connection", e);
                 } finally {
                     closeCinnection();
                 }
@@ -86,7 +90,7 @@ public class Network implements ServiceCommands {
                     new MessageHandler(message, controller);
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                logger.error("Connection", e);
             } finally {
                 closeCinnection();
             }
@@ -118,7 +122,7 @@ public class Network implements ServiceCommands {
         rusume();
     }
 
-    public void sendRegInfo(){
+    public void sendRegInfo() {
         queue.insert(encoder.getMessage("1000001rtem", "login", "pass"));
         rusume();
     }
@@ -129,12 +133,12 @@ public class Network implements ServiceCommands {
     }
 
     public void downLoadFile(String path) {
-        queue.insert(encoder.getMessage(ServiceCommands.DOWNLOAD_FILE_FROM_SERVER,path));
+        queue.insert(encoder.getMessage(ServiceCommands.DOWNLOAD_FILE_FROM_SERVER, path));
         rusume();
     }
 
-    public void deleteFileFromServer (String path){
-        queue.insert(encoder.getMessage(ServiceCommands.DELETE_FILE_FROM_SERVER,path));
+    public void deleteFileFromServer(String path) {
+        queue.insert(encoder.getMessage(ServiceCommands.DELETE_FILE_FROM_SERVER, path));
         rusume();
     }
 
@@ -144,8 +148,9 @@ public class Network implements ServiceCommands {
             socket.close();
             in.close();
             out.close();
+            logger.info("Connection close");
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("Connection", e);
         }
     }
 

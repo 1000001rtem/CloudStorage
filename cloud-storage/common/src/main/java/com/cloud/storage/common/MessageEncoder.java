@@ -179,11 +179,11 @@ public class MessageEncoder implements ServiceCommands {
         return md5Hex;
     }
 
-    public static void print(byte[] arr, int size) {
-        for (int i = 0; i < size; i++) {
-            System.out.print(" " + arr[i]);
-            if (i % 15 == 0) System.out.println();
-        }
-        System.out.println();
-    }
+//    public static void print(byte[] arr, int size) {
+//        for (int i = 0; i < size; i++) {
+//            System.out.print(" " + arr[i]);
+//            if (i % 15 == 0) System.out.println();
+//        }
+//        System.out.println();
+//    }
 }

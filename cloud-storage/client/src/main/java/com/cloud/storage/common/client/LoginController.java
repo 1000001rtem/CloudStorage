@@ -32,7 +32,7 @@ public class LoginController implements Controllers {
         passArea.clear();
     }
 
-    public void regAction(){
+    public void regAction() {
         network.setController(this);
         network.sendRegInfo();
     }

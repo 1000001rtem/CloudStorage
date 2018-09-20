@@ -1,6 +1,9 @@
 package com.cloud.storage.common.server.DataBase;
 
+import com.cloud.storage.common.server.ServerMainClass;
 import com.cloud.storage.common.server.User;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -8,6 +11,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class UserTable implements SQLConstants {
+
+    public static final Logger logger = LogManager.getLogger(ServerMainClass.class.getName());
 
     private Connection connection;
     private PreparedStatement statement;
@@ -28,15 +33,16 @@ public class UserTable implements SQLConstants {
             statement = connection.prepareStatement(CREATE_TABLE);
             statement.execute();
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("UserTable", e);
         } finally {
             try {
                 statement.close();
             } catch (SQLException e) {
-                e.printStackTrace();
+                logger.error("UserTable", e);
             }
         }
     }
+
     public void createNewUser(User user) {
         try {
             statement = connection.prepareStatement("INSERT INTO " + USER_TABLE_NAME + "(" +
@@ -49,12 +55,12 @@ public class UserTable implements SQLConstants {
             statement.setString(3, user.getPassword());
             statement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("UserTable", e);
         } finally {
             try {
                 statement.close();
             } catch (SQLException e) {
-                e.printStackTrace();
+                logger.error("UserTable", e);
             }
         }
     }
@@ -69,12 +75,12 @@ public class UserTable implements SQLConstants {
             if (resultSet == null || resultSet.isClosed() || !resultSet.next()) return false;
             else return true;
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("UserTable", e);
         } finally {
             try {
                 statement.close();
             } catch (SQLException e) {
-                e.printStackTrace();
+                logger.error("UserTable", e);
             }
         }
         return false;
@@ -92,12 +98,12 @@ public class UserTable implements SQLConstants {
                 if (resultPass.equals(password)) return true;
             } else return false;
         } catch (SQLException e) {
-            e.printStackTrace();
-        }finally {
+            logger.error("UserTable", e);
+        } finally {
             try {
                 statement.close();
             } catch (SQLException e) {
-                e.printStackTrace();
+                logger.error("UserTable", e);
             }
         }
         return false;
@@ -115,12 +121,12 @@ public class UserTable implements SQLConstants {
                 return resultSet.getString(1);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("UserTable", e);
         } finally {
             try {
                 statement.close();
             } catch (SQLException e) {
-                e.printStackTrace();
+                logger.error("UserTable", e);
             }
         }
         return null;
@@ -136,12 +142,12 @@ public class UserTable implements SQLConstants {
 
             return resultSet.getInt(1);
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("UserTable", e);
         } finally {
             try {
                 statement.close();
             } catch (SQLException e) {
-                e.printStackTrace();
+                logger.error("UserTable", e);
             }
         }
         return -1;

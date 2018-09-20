@@ -1,6 +1,9 @@
 package com.cloud.storage.common.server.DataBase;
 
 import com.cloud.storage.common.server.MyFile;
+import com.cloud.storage.common.server.ServerMainClass;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -8,6 +11,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class FileTable implements SQLConstants {
+
+    public static final Logger logger = LogManager.getLogger(ServerMainClass.class.getName());
+
     private Connection connection;
     private PreparedStatement statement;
 
@@ -29,12 +35,12 @@ public class FileTable implements SQLConstants {
             statement = connection.prepareStatement(CREATE_FILE_TABLE);
             statement.execute();
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("FileTable", e);
         } finally {
             try {
                 statement.close();
             } catch (SQLException e) {
-                e.printStackTrace();
+                logger.error("FileTable", e);
             }
         }
     }
@@ -56,13 +62,13 @@ public class FileTable implements SQLConstants {
                 statement.setString(5, file.getPath());
                 statement.executeUpdate();
             } catch (SQLException e) {
-                e.printStackTrace();
+                logger.error("FileTable", e);
                 return false;
             } finally {
                 try {
                     statement.close();
                 } catch (SQLException e) {
-                    e.printStackTrace();
+                    logger.error("FileTable", e);
                 }
             }
             return true;
@@ -86,12 +92,12 @@ public class FileTable implements SQLConstants {
                 return false;
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("FileTable", e);
         } finally {
             try {
                 statement.close();
             } catch (SQLException e) {
-                e.printStackTrace();
+                logger.error("FileTable", e);
             }
         }
         return false;
@@ -108,12 +114,12 @@ public class FileTable implements SQLConstants {
                 return true;
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("FileTable", e);
         } finally {
             try {
                 statement.close();
             } catch (SQLException e) {
-                e.printStackTrace();
+                logger.error("FileTable", e);
             }
         }
         return false;
@@ -127,12 +133,12 @@ public class FileTable implements SQLConstants {
                         FILE_PATH + " = '" + path + "' );");
                 statement.execute();
             } catch (SQLException e) {
-                e.printStackTrace();
+                logger.error("FileTable", e);
             } finally {
                 try {
                     statement.close();
                 } catch (SQLException e) {
-                    e.printStackTrace();
+                    logger.error("FileTable", e);
                 }
             }
             return true;

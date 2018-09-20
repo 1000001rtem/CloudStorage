@@ -5,10 +5,14 @@ import com.cloud.storage.common.MessageEncoder;
 import com.cloud.storage.common.ServiceCommands;
 import com.cloud.storage.common.message.FileMessage;
 import io.netty.channel.ChannelHandlerContext;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.FileNotFoundException;
 
 public class FileHandler implements Directorys, ServiceCommands {
+
+    public static final Logger logger = LogManager.getLogger(FileHandler.class.getName());
 
     private ChannelHandlerContext ctx;
     private FileMessage msg;
@@ -20,7 +24,7 @@ public class FileHandler implements Directorys, ServiceCommands {
         this.ctx = ctx;
         this.msg = (FileMessage) msg;
         encoder = new MessageEncoder();
-        if(msg != null){
+        if (msg != null) {
             createFile(this.msg);
         }
     }
@@ -36,9 +40,10 @@ public class FileHandler implements Directorys, ServiceCommands {
             return;
         }
         int userId = user.getId();
-        if(userId != -1) {
+        if (userId != -1) {
             if (myFile.addFile(userId)) {
                 ServerUtilities.sendMessageToClient(ctx, encoder.getFileListMessage(ServerUtilities.getFileList()));
+                logger.info("User: " + user.getId() + ". " + user.getNickName() + "send file: " + myFile.getFileName());
             } else {
                 ServerUtilities.sendMessageToClient(ctx, encoder.getMessage(FILE_EXIST));
             }

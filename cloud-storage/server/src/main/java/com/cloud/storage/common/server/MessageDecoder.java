@@ -9,13 +9,11 @@ import com.cloud.storage.common.message.FileMessage;
 import com.cloud.storage.common.message.RegistrationMessage;
 
 import java.io.FileNotFoundException;
-import java.nio.file.NoSuchFileException;
 import java.util.Arrays;
-import java.util.NoSuchElementException;
 
 public class MessageDecoder implements ServiceCommands {
 
-    public MyFile getFile(FileMessage message) throws FileNotFoundException{
+    public MyFile getFile(FileMessage message) throws FileNotFoundException {
         byte[] bytes = message.getBytes();
         StringBuffer fileName = new StringBuffer();
         int count = 0;
@@ -30,21 +28,20 @@ public class MessageDecoder implements ServiceCommands {
         String checkSumString = MessageEncoder.getMD5String(checkSum);
         count += MD5_CODE_LENGTH;
 
-        byte[] fileBytes = Arrays.copyOfRange(bytes, count+1, bytes.length-1);
-        System.out.println(MessageEncoder.getMD5String(MessageEncoder.getMD5(fileBytes)).equals(checkSumString));
-        if(MessageEncoder.getMD5String(MessageEncoder.getMD5(fileBytes)).equals(checkSumString)) {
+        byte[] fileBytes = Arrays.copyOfRange(bytes, count + 1, bytes.length - 1);
+        if (MessageEncoder.getMD5String(MessageEncoder.getMD5(fileBytes)).equals(checkSumString)) {
             return new MyFile(fileName.toString(), checkSumString, fileBytes);
         }
         throw new FileNotFoundException("CheckSumm not equals");
     }
 
     public byte getCommand(CommandMessage message) {
-            return message.getBytes()[0];
-     }
+        return message.getBytes()[0];
+    }
 
-     public String getFilePath (CommandMessage message){
+    public String getFilePath(CommandMessage message) {
         return new String(Arrays.copyOfRange(message.getBytes(), 1, message.getBytes().length));
-     }
+    }
 
     public User getUser(AuthMessage message) {
         byte[] login = new byte[MD5_CODE_LENGTH];
