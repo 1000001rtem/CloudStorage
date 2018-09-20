@@ -19,7 +19,7 @@ public class MyFile implements Directorys {
         this.checkSum = checkSum;
         this.bytes = bytes;
         this.fileSize = String.valueOf(bytes.length/1024) + " kb";
-        this.path = CLIENT_DIRECTORY + "/" + this.getFileName();
+        this.path = CLIENT_DIRECTORY + "\\" + this.getFileName();
         addFile();
     }
 

@@ -7,7 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class FileTable implements SQLConstants{
+public class FileTable implements SQLConstants {
     private Connection connection;
     private PreparedStatement statement;
 
@@ -70,7 +70,7 @@ public class FileTable implements SQLConstants{
         return false;
     }
 
-    private boolean isFileExists(String fileName, int userId){
+    private boolean isFileExists(String fileName, int userId) {
         try {
             statement = connection.prepareStatement("SELECT " + FILE_NAME + " FROM " +
                     FILE_TABLE_NAME + " WHERE (" +
@@ -79,7 +79,7 @@ public class FileTable implements SQLConstants{
             ResultSet resultSet = statement.getResultSet();
             if (resultSet != null && !resultSet.isClosed()) {
                 while (resultSet.next()) {
-                    if(resultSet.getString(1).equals(fileName)){
+                    if (resultSet.getString(1).equals(fileName)) {
                         return true;
                     }
                 }
@@ -93,6 +93,49 @@ public class FileTable implements SQLConstants{
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+        }
+        return false;
+    }
+
+    private boolean isFileExists(String path) {
+        try {
+            statement = connection.prepareStatement("SELECT " + FILE_NAME + " FROM " +
+                    FILE_TABLE_NAME + " WHERE (" +
+                    FILE_PATH + " = '" + path + "' );");
+            statement.execute();
+            ResultSet resultSet = statement.getResultSet();
+            if (resultSet != null && !resultSet.isClosed()) {
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                statement.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
+
+    public boolean deleteFile(String path) {
+        if (isFileExists(path)) {
+            try {
+                statement = connection.prepareStatement("DELETE FROM " +
+                        FILE_TABLE_NAME + " WHERE (" +
+                        FILE_PATH + " = '" + path + "' );");
+                statement.execute();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            return true;
         }
         return false;
     }

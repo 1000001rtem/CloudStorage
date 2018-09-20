@@ -42,7 +42,7 @@ public class MessageDecoder implements ServiceCommands {
             return message.getBytes()[0];
      }
 
-     public String getFileName (CommandMessage message){
+     public String getFilePath (CommandMessage message){
         return new String(Arrays.copyOfRange(message.getBytes(), 1, message.getBytes().length));
      }
 

@@ -24,7 +24,7 @@ public class ClientUtilities implements Directorys {
             Files.walkFileTree(path, new SimpleFileVisitor<Path>() {
                 @Override
                 public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-                    clientTableList.add(new FileInfo(file.getFileName().toString(), file.toFile().length()));
+                    clientTableList.add(new FileInfo(file.getFileName().toString(), file.toFile().length(), file.toFile().getAbsolutePath()));
                     return FileVisitResult.CONTINUE;
                 }
             });
@@ -62,5 +62,23 @@ public class ClientUtilities implements Directorys {
 
     public static ObservableList<FileInfo> getServerTableList (){
         return serverTableList;
+    }
+
+    private static void clearClientFileList (){
+        clientTableList.clear();
+    }
+
+    private static void clearServerFileList (){
+        serverTableList.clear();
+    }
+
+    public static void refreshClientFileList(){
+        clearClientFileList();
+        fillClientTableList();
+    }
+
+    public static void refreshServerFileList(byte [] message){
+        clearServerFileList();
+        fillServerTable(message);
     }
 }

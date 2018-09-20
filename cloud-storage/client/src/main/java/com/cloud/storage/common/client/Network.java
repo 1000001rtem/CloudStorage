@@ -128,8 +128,13 @@ public class Network implements ServiceCommands {
         rusume();
     }
 
-    public void downLoadFile(String fileName) {
-        queue.insert(encoder.getMessage(fileName));
+    public void downLoadFile(String path) {
+        queue.insert(encoder.getMessage(ServiceCommands.DOWNLOAD_FILE_FROM_SERVER,path));
+        rusume();
+    }
+
+    public void deleteFileFromServer (String path){
+        queue.insert(encoder.getMessage(ServiceCommands.DELETE_FILE_FROM_SERVER,path));
         rusume();
     }
 

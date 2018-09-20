@@ -98,17 +98,19 @@ public class MessageEncoder implements ServiceCommands {
         return messageBytes;
     }
 
-    public byte[] getMessage(String fileName) {
-        byte[] messageBytes = new byte[2 + fileName.getBytes().length];
+    public byte[] getMessage(byte command, String path) {
+        byte[] messageBytes = new byte[2 + path.getBytes().length];
 
         String size = String.valueOf(messageBytes.length);
         messageBytes = addMessageSizeInfo(messageBytes, size);
 
         messageBytes[size.getBytes().length + 1] = COMMAND_CODE;
-        messageBytes[size.getBytes().length + 2] = DOWNLOAD_FILE_FROM_SERVER;
-        System.arraycopy(fileName.getBytes(), 0, messageBytes, size.getBytes().length + 3, fileName.getBytes().length);
+        messageBytes[size.getBytes().length + 2] = command;
+        System.arraycopy(path.getBytes(), 0, messageBytes, size.getBytes().length + 3, path.getBytes().length);
         return messageBytes;
     }
+
+
 
     public byte[] getFileListMessage(byte[] arr) {
         byte[] messageBytes = new byte[arr.length + 1];
