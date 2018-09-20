@@ -27,7 +27,7 @@
                 <Button fx:id="loginBtn" maxWidth="Infinity" text="Login" HBox.hgrow="ALWAYS" onAction="#authAction"/>
             </children>
             <children>
-                <Button fx:id="regBtn" text="Registration" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+                <Button fx:id="regBtn" text="Registration" maxWidth="Infinity" HBox.hgrow="ALWAYS" onAction="#regAction"/>
             </children>
         </VBox>
     </VBox>
