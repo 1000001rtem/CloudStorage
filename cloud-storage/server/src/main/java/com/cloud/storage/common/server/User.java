@@ -54,7 +54,7 @@ public class User implements Directorys {
     public void createNewUser() {
         if (!isUserExists()) {
             table.createNewUser(this);
-        } 
+        }
     }
 
     private boolean isUserExists() {

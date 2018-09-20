@@ -2,10 +2,15 @@ package com.cloud.storage.common.server;
 
 import com.cloud.storage.common.Directorys;
 import com.cloud.storage.common.server.DataBase.FileTable;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.*;
 
 public class MyFile implements Directorys, Serializable {
+
+    public static final Logger logger = LogManager.getLogger(MyFile.class.getName());
+
     private transient String path;
     private String fileSize;
     private String fileName;
@@ -17,14 +22,14 @@ public class MyFile implements Directorys, Serializable {
         this.fileName = name;
         this.checkSum = checkSum;
         this.bytes = bytes;
-        this.fileSize = String.valueOf(bytes.length/1024) + " kb";
+        this.fileSize = String.valueOf(bytes.length / 1024) + " kb";
         this.path = SERVER_DIRECTORY + "\\" + this.getFileName();
         this.table = new FileTable();
     }
 
     public MyFile(String fileName, long fileSize) {
         this.fileName = fileName;
-        this.fileSize = String.valueOf(fileSize/1024) + " kb";
+        this.fileSize = String.valueOf(fileSize / 1024) + " kb";
     }
 
 
@@ -34,9 +39,9 @@ public class MyFile implements Directorys, Serializable {
             try (BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(file))) {
                 stream.write(this.bytes);
             } catch (FileNotFoundException e) {
-                e.printStackTrace();
+                logger.error("File Write", e);
             } catch (IOException e) {
-                e.printStackTrace();
+                logger.error("File Write", e);
             }
             return true;
         }

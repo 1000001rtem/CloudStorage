@@ -15,7 +15,7 @@ public class UserRegistrationHandler implements ServiceCommands {
     private RegistrationMessage message;
     private MessageDecoder decoder;
 
-    public UserRegistrationHandler (RegistrationMessage message, ChannelHandlerContext ctx){
+    public UserRegistrationHandler(RegistrationMessage message, ChannelHandlerContext ctx) {
         this.message = message;
         this.ctx = ctx;
         this.decoder = new MessageDecoder();

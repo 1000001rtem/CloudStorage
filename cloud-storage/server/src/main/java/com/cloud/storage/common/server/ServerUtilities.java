@@ -3,6 +3,8 @@ package com.cloud.storage.common.server;
 import com.cloud.storage.common.Directorys;
 import com.cloud.storage.common.FileInfo;
 import io.netty.channel.ChannelHandlerContext;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -10,9 +12,10 @@ import java.io.ObjectOutputStream;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class ServerUtilities implements Directorys {
+
+    public static final Logger logger = LogManager.getLogger(ServerUtilities.class.getName());
 
     public static byte[] getFileList() {
         ArrayList<FileInfo> list = new ArrayList<>();
@@ -26,7 +29,7 @@ public class ServerUtilities implements Directorys {
                 }
             });
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("File Walk", e);
         }
         return writeToByteArray(list);
 
@@ -39,12 +42,12 @@ public class ServerUtilities implements Directorys {
             ObjectOutputStream out = new ObjectOutputStream(baos);
             out.writeObject(list);
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("Array convert", e);
         }
         return baos.toByteArray();
     }
 
-    public static void sendMessageToClient(ChannelHandlerContext ctx, byte [] message){
+    public static void sendMessageToClient(ChannelHandlerContext ctx, byte[] message) {
         ctx.write(message);
         ctx.flush();
     }
